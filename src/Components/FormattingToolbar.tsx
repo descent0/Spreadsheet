@@ -110,7 +110,7 @@ const FormattingToolbar: React.FC<FormatbarProps> = ({ selectedCells, selectedCe
       <TooltipWrapper tooltip="Font Family">
         <select
           value={fontFamily}
-          onChange={(e) => handleFontFamilyChange(e.target.value, setFontFamily, selectedCells, data, setData)}
+          onChange={(e) => handleFontFamilyChange(e.target.value, setFontFamily, selectedCells, setData)}
           className="px-2 py-1.5 border border-[#EEEEEE] text-sm text-[#545454] rounded cursor-pointer"
         >
           <option value="">Font</option>
@@ -133,7 +133,7 @@ const FormattingToolbar: React.FC<FormatbarProps> = ({ selectedCells, selectedCe
           <input
             type="color"
             value={fontColor}
-            onChange={(e) => handleFontColorChange(e.target.value, setFontColor, selectedCells, data, setData)}
+            onChange={(e) => handleFontColorChange(e.target.value, setFontColor, selectedCells, setData)}
             className="w-6 h-6 border border-[#EEEEEE] rounded cursor-pointer"
           />
         </label>
@@ -146,7 +146,7 @@ const FormattingToolbar: React.FC<FormatbarProps> = ({ selectedCells, selectedCe
           <input
             type="color"
             value={bgColor}
-            onChange={(e) => handleBgColorChange(e.target.value, setBgColor, selectedCells, data, setData)}
+            onChange={(e) => handleBgColorChange(e.target.value, setBgColor, selectedCells,  setData)}
             className="w-6 h-6 border border-[#EEEEEE] rounded cursor-pointer"
           />
         </label>
@@ -154,51 +154,51 @@ const FormattingToolbar: React.FC<FormatbarProps> = ({ selectedCells, selectedCe
 
       {/* Align Buttons */}
       <TooltipWrapper tooltip="Align Left">
-        <button onClick={() => handleAlign('left', setTextAlign, selectedCells, data, setData)} className={iconBtn(textAlign === 'left')}>
+        <button onClick={() => handleAlign('left', setTextAlign, selectedCells, setData)} className={iconBtn(textAlign === 'left')}>
           <AlignLeft size={18} />
         </button>
       </TooltipWrapper>
 
       <TooltipWrapper tooltip="Align Center">
-        <button onClick={() => handleAlign('center', setTextAlign, selectedCells, data, setData)} className={iconBtn(textAlign === 'center')}>
+        <button onClick={() => handleAlign('center', setTextAlign, selectedCells,  setData)} className={iconBtn(textAlign === 'center')}>
           <AlignCenter size={18} />
         </button>
       </TooltipWrapper>
 
       <TooltipWrapper tooltip="Align Right">
-        <button onClick={() => handleAlign('right', setTextAlign, selectedCells, data, setData)} className={iconBtn(textAlign === 'right')}>
+        <button onClick={() => handleAlign('right', setTextAlign, selectedCells,  setData)} className={iconBtn(textAlign === 'right')}>
           <AlignRight size={18} />
         </button>
       </TooltipWrapper>
 
       {/* Style Toggles */}
       <TooltipWrapper tooltip="Bold">
-        <button onClick={() => toggleBold(bold, setBold, selectedCells, data, setData)} className={iconBtn(bold)}>
+        <button onClick={() => toggleBold(bold, setBold, selectedCells, setData)} className={iconBtn(bold)}>
           <Bold size={18} />
         </button>
       </TooltipWrapper>
 
       <TooltipWrapper tooltip="Italic">
-        <button onClick={() => toggleItalic(italic, setItalic, selectedCells, data, setData)} className={iconBtn(italic)}>
+        <button onClick={() => toggleItalic(italic, setItalic, selectedCells,  setData)} className={iconBtn(italic)}>
           <Italic size={18} />
         </button>
       </TooltipWrapper>
 
       <TooltipWrapper tooltip="Underline">
-        <button onClick={() => toggleUnderline(underline, setUnderline, selectedCells, data, setData)} className={iconBtn(underline)}>
+        <button onClick={() => toggleUnderline(underline, setUnderline, selectedCells, setData)} className={iconBtn(underline)}>
           <Underline size={18} />
         </button>
       </TooltipWrapper>
 
       <TooltipWrapper tooltip="Strikethrough">
-        <button onClick={() => toggleStrikethrough(strikethrough, setStrikethrough, selectedCells, data, setData)} className={iconBtn(strikethrough)}>
+        <button onClick={() => toggleStrikethrough(strikethrough, setStrikethrough, selectedCells,  setData)} className={iconBtn(strikethrough)}>
           <Strikethrough size={18} />
         </button>
       </TooltipWrapper>
 
       {/* Toggle Case */}
       <TooltipWrapper tooltip="Toggle Case">
-        <button onClick={() => toggleCase(isUppercase, setIsUppercase, selectedCells, data, setData)} className={iconBtn(isUppercase)}>
+        <button onClick={() => toggleCase(isUppercase, setIsUppercase, selectedCells, setData)} className={iconBtn(isUppercase)}>
           {isUppercase ? <ArrowUpAZ size={18} /> : <ArrowDownAZ size={18} />}
         </button>
       </TooltipWrapper>
@@ -216,7 +216,7 @@ const FormattingToolbar: React.FC<FormatbarProps> = ({ selectedCells, selectedCe
             setStrikethrough,
             setIsUppercase,
             setFontFamily,
-          }, selectedCells, data, setData)}
+          }, selectedCells,  setData)}
           className={iconBtn(false)}
         >
           <Eraser size={18} />

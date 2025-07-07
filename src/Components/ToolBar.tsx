@@ -32,7 +32,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedCells, selectedCell, data, se
   alert("Please select cells to hide field.");
   return;
 }
-  await applyStyleToCells(selectedCells, { visibility: "hidden" }, data, setData);
+  await applyStyleToCells(selectedCells, { visibility: "hidden" }, setData);
 
   setHideFields((prev) => {
     const updated = new Set(prev);
@@ -47,7 +47,6 @@ const Toolbar: React.FC<ToolbarProps> = ({ selectedCells, selectedCell, data, se
       {
       visibility: "visible",
     },
-      data,
       setData
     );
    setHideFields(new Set());

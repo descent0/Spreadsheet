@@ -13,7 +13,6 @@ type SetDataFn = React.Dispatch<React.SetStateAction<SheetData>>
 export const applyStyleToCells = (
   selectedCells: Set<string>,
   style: object,
-  data: SheetData,
   setData: SetDataFn
 ) => {
   setData((prevData) => {
@@ -43,11 +42,11 @@ export const handleFontSizeChange = (
   value: string,
   setFontSize: (v: string) => void,
   selectedCells: Set<string>,
-  data: SheetData,
+  
 setData: SetDataFn
 ) => {
   setFontSize(value);
-  applyStyleToCells(selectedCells, { fontSize: value }, data, setData);
+  applyStyleToCells(selectedCells, { fontSize: value },  setData);
   console.log('Font size changed to:', value);
 };
 
@@ -55,105 +54,105 @@ export const handleFontFamilyChange = (
   value: string,
   setFontFamily: (v: string) => void,
   selectedCells: Set<string>,
- data: SheetData,
+ 
 setData: SetDataFn
 ) => {
   setFontFamily(value);
-  applyStyleToCells(selectedCells, { fontFamily: value }, data, setData);
+  applyStyleToCells(selectedCells, { fontFamily: value },  setData);
 };
 
 export const handleFontColorChange = (
   value: string,
   setFontColor: (v: string) => void,
   selectedCells: Set<string>,
-  data: SheetData,
+  
 setData: SetDataFn
 ) => {
   setFontColor(value);
-  applyStyleToCells(selectedCells, { color: value }, data, setData);
+  applyStyleToCells(selectedCells, { color: value }, setData);
 };
 
 export const handleBgColorChange = (
   value: string,
   setBgColor: (v: string) => void,
   selectedCells: Set<string>,
-  data: SheetData,
+  
 setData: SetDataFn
 ) => {
   setBgColor(value);
-  applyStyleToCells(selectedCells, { backgroundColor: value }, data, setData);
+  applyStyleToCells(selectedCells, { backgroundColor: value },  setData);
 };
 
 export const handleAlign = (
   align: string,
   setTextAlign: (v: string) => void,
   selectedCells: Set<string>,
- data: SheetData,
+ 
 setData: SetDataFn
 ) => {
   setTextAlign(align);
-  applyStyleToCells(selectedCells, { textAlign: align }, data, setData);
+  applyStyleToCells(selectedCells, { textAlign: align },  setData);
 };
 
 export const toggleBold = (
   bold: boolean,
   setBold: (v: boolean) => void,
   selectedCells: Set<string>,
- data: SheetData,
+ 
 setData: SetDataFn
 ) => {
   setBold(!bold);
-  applyStyleToCells(selectedCells, { fontWeight: bold ? 'normal' : 'bold' }, data, setData);
+  applyStyleToCells(selectedCells, { fontWeight: bold ? 'normal' : 'bold' },  setData);
 };
 
 export const toggleItalic = (
   italic: boolean,
   setItalic: (v: boolean) => void,
   selectedCells: Set<string>,
-  data: SheetData,
+  
 setData: SetDataFn
 ) => {
   setItalic(!italic);
-  applyStyleToCells(selectedCells, { fontStyle: italic ? 'normal' : 'italic' }, data, setData);
+  applyStyleToCells(selectedCells, { fontStyle: italic ? 'normal' : 'italic' },  setData);
 };
 
 export const toggleUnderline = (
   underline: boolean,
   setUnderline: (v: boolean) => void,
   selectedCells: Set<string>,
-  data: SheetData,
+  
 setData: SetDataFn
 ) => {
   setUnderline(!underline);
   applyStyleToCells(selectedCells, {
     textDecoration: underline ? 'none' : 'underline',
-  }, data, setData);
+  }, setData);
 };
 
 export const toggleStrikethrough = (
   strikethrough: boolean,
   setStrikethrough: (v: boolean) => void,
   selectedCells: Set<string>,
- data: SheetData,
+ 
 setData: SetDataFn
 ) => {
   setStrikethrough(!strikethrough);
   applyStyleToCells(selectedCells, {
     textDecoration: strikethrough ? 'none' : 'line-through',
-  }, data, setData);
+  },  setData);
 };
 
 export const toggleCase = (
   isUppercase: boolean,
   setIsUppercase: (v: boolean) => void,
   selectedCells: Set<string>,
-  data: SheetData,
+  
 setData: SetDataFn
 ) => {
   setIsUppercase(!isUppercase);
   applyStyleToCells(selectedCells, {
     textTransform: isUppercase ? 'none' : 'uppercase',
-  }, data, setData);
+  },  setData);
 };
 
 export const handleClearFormatting = (
@@ -169,7 +168,7 @@ export const handleClearFormatting = (
     setFontFamily: (v: string) => void;
   },
   selectedCells: Set<string>,
-  data: SheetData,
+  
 setData: SetDataFn
 ) => {
   setters.setFontColor('#000000');
@@ -192,7 +191,7 @@ setData: SetDataFn
     textDecoration: 'none',
     textTransform: 'none',
     fontFamily: '',
-  }, data, setData);
+  }, setData);
 };
 
 
