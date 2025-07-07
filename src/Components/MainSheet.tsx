@@ -82,12 +82,13 @@ const ProjectSpreadsheet: React.FC<SheetProps> = ({
 
   //resizing columns functionality
 
-  const getColumnWidth = (colIndex: number): number => {
-    return (
-      columnWidths[colIndex] ||
-      (colIndex === 0 ? 32 : colIndex === 1 ? 256 : 124)
-    );
-  };
+ const getColumnWidth = useCallback((colIndex: number): number => {
+  return (
+    columnWidths[colIndex] ||
+    (colIndex === 0 ? 32 : colIndex === 1 ? 256 : 124)
+  );
+}, [columnWidths]);
+
 
   const handleResizeStart = (e: React.MouseEvent, colIndex: number) => {
     e.preventDefault();
@@ -138,41 +139,37 @@ const ProjectSpreadsheet: React.FC<SheetProps> = ({
   );
 
   // Function to scroll to a specific cell
+const scrollToCell = useCallback((
+  containerRef: React.RefObject<HTMLDivElement>,
+  colIndex: number,
+  rowIndex: number
+) => {
+  if (!containerRef.current) return;
 
-  const scrollToCell = (
-    containerRef: React.RefObject<HTMLDivElement>,
-    colIndex: number,
-    rowIndex: number
-  ) => {
-    if (!containerRef.current) return;
+  const container = containerRef.current;
+  const cellHeight = 32;
 
-    const container = containerRef.current;
-    const cellHeight = 32;
+  let cellLeft = 0;
+  for (let i = 0; i < colIndex; i++) {
+    cellLeft += getColumnWidth(i); // this makes getColumnWidth a dependency
+  }
 
-    // Calculate cell position with dynamic widths
-    let cellLeft = 0;
-    for (let i = 0; i <= colIndex; i++) {
-      if (i === colIndex) break;
-      cellLeft += getColumnWidth(i);
-    }
+  const cellWidth = getColumnWidth(colIndex);
+  const cellTop = (rowIndex + 1) * cellHeight;
 
-    const cellWidth = getColumnWidth(colIndex);
-    const cellTop = (rowIndex + 1) * cellHeight;
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
+  const cellCenterX = cellLeft + cellWidth / 2;
+  const cellCenterY = cellTop + cellHeight / 2;
+  const newScrollLeft = cellCenterX - containerWidth / 2;
+  const newScrollTop = cellCenterY - containerHeight / 2;
 
-    // Rest of the function remains the same...
-    const containerWidth = container.clientWidth;
-    const containerHeight = container.clientHeight;
-    const cellCenterX = cellLeft + cellWidth / 2;
-    const cellCenterY = cellTop + cellHeight / 2;
-    const newScrollLeft = cellCenterX - containerWidth / 2;
-    const newScrollTop = cellCenterY - containerHeight / 2;
-
-    container.scrollTo({
-      left: Math.max(0, newScrollLeft),
-      top: Math.max(0, newScrollTop),
-      behavior: "smooth",
-    });
-  };
+  container.scrollTo({
+    left: Math.max(0, newScrollLeft),
+    top: Math.max(0, newScrollTop),
+    behavior: "smooth",
+  });
+}, [getColumnWidth]);
 
 
   //search functionality
@@ -241,6 +238,7 @@ const ProjectSpreadsheet: React.FC<SheetProps> = ({
     onSelectedCellsChange,
     visibleRows,
     visibleCols,
+    scrollToCell
   ]);
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
@@ -366,6 +364,7 @@ const ProjectSpreadsheet: React.FC<SheetProps> = ({
     onSelectedCellChange,
     onSelectedCellsChange,
     setData,
+    scrollToCell,
   ]);
 
   const handleCellClick = (cellKey: string): void => {

@@ -1,69 +1,34 @@
-# React + TypeScript + Vite
+# 📊 Spreadsheet – React Intern Assignment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A front-end-only React + TypeScript prototype that replicates a **Google Sheet/Excel-like experience**, built using **Vite**, **Tailwind CSS**, and **lucide-react**.
 
-Currently, two official plugins are available:
+## ⚙️ Tech Setup: React + TypeScript + Vite
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This template provides a minimal setup using:
 
-## Expanding the ESLint configuration
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react) (Babel)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) (SWC)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+It supports Hot Module Reloading (HMR) and ESLint integration.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🌟 Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- Pixel-perfect layout matching [Figma design](https://www.figma.com/design/3nywpu5sz45RrCmwe68QZP/Intern-Design-Assigment?node-id=2-2535&t=DJGGMt8I4fiZjoIB-1)
+- Editable grid experience like Excel/Google Sheets
+- Styled with Tailwind CSS
+- Type-safe (TypeScript strict mode)
+- Clean linting (`npm run lint`) and type checking (`npm run type-check`)
+- Text Formatting --> click on the toolbar to open a formatting tab (Select cells first)
+- Export in csv file
+- New sheets can be added
+- Search within sheet
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📦 Setup
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+```bash
+npm install
+npm run dev
+npm run lint
+npm run type-check
