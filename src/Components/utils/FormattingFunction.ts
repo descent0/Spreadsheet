@@ -1,11 +1,22 @@
+type CellData = {
+  value: string;
+  customStyle:Partial<React.CSSProperties>
+};
+
+type SheetData = {
+  [cellId: string]: CellData;
+};
+
+type SetDataFn = (updater: (prev: SheetData) => SheetData) => void;
+
 
 export const applyStyleToCells = (
   selectedCells: Set<string>,
   style: object,
-  data: any,
-  setData: (updater: any) => void
+  data: SheetData,
+  setData: SetDataFn
 ) => {
-  setData((prevData: any) => {
+  setData((prevData) => {
     const newData = { ...prevData };
     selectedCells.forEach((cellId) => {
       if (newData[cellId]) {
@@ -32,8 +43,8 @@ export const handleFontSizeChange = (
   value: string,
   setFontSize: (v: string) => void,
   selectedCells: Set<string>,
-  data: any,
-  setData: (updater: any) => void
+  data: SheetData,
+setData: SetDataFn
 ) => {
   setFontSize(value);
   applyStyleToCells(selectedCells, { fontSize: value }, data, setData);
@@ -44,8 +55,8 @@ export const handleFontFamilyChange = (
   value: string,
   setFontFamily: (v: string) => void,
   selectedCells: Set<string>,
-  data: any,
-  setData: (updater: any) => void
+ data: SheetData,
+setData: SetDataFn
 ) => {
   setFontFamily(value);
   applyStyleToCells(selectedCells, { fontFamily: value }, data, setData);
@@ -55,8 +66,8 @@ export const handleFontColorChange = (
   value: string,
   setFontColor: (v: string) => void,
   selectedCells: Set<string>,
-  data: any,
-  setData: (updater: any) => void
+  data: SheetData,
+setData: SetDataFn
 ) => {
   setFontColor(value);
   applyStyleToCells(selectedCells, { color: value }, data, setData);
@@ -66,8 +77,8 @@ export const handleBgColorChange = (
   value: string,
   setBgColor: (v: string) => void,
   selectedCells: Set<string>,
-  data: any,
-  setData: (updater: any) => void
+  data: SheetData,
+setData: SetDataFn
 ) => {
   setBgColor(value);
   applyStyleToCells(selectedCells, { backgroundColor: value }, data, setData);
@@ -77,8 +88,8 @@ export const handleAlign = (
   align: string,
   setTextAlign: (v: string) => void,
   selectedCells: Set<string>,
-  data: any,
-  setData: (updater: any) => void
+ data: SheetData,
+setData: SetDataFn
 ) => {
   setTextAlign(align);
   applyStyleToCells(selectedCells, { textAlign: align }, data, setData);
@@ -88,8 +99,8 @@ export const toggleBold = (
   bold: boolean,
   setBold: (v: boolean) => void,
   selectedCells: Set<string>,
-  data: any,
-  setData: (updater: any) => void
+ data: SheetData,
+setData: SetDataFn
 ) => {
   setBold(!bold);
   applyStyleToCells(selectedCells, { fontWeight: bold ? 'normal' : 'bold' }, data, setData);
@@ -99,8 +110,8 @@ export const toggleItalic = (
   italic: boolean,
   setItalic: (v: boolean) => void,
   selectedCells: Set<string>,
-  data: any,
-  setData: (updater: any) => void
+  data: SheetData,
+setData: SetDataFn
 ) => {
   setItalic(!italic);
   applyStyleToCells(selectedCells, { fontStyle: italic ? 'normal' : 'italic' }, data, setData);
@@ -110,8 +121,8 @@ export const toggleUnderline = (
   underline: boolean,
   setUnderline: (v: boolean) => void,
   selectedCells: Set<string>,
-  data: any,
-  setData: (updater: any) => void
+  data: SheetData,
+setData: SetDataFn
 ) => {
   setUnderline(!underline);
   applyStyleToCells(selectedCells, {
@@ -123,8 +134,8 @@ export const toggleStrikethrough = (
   strikethrough: boolean,
   setStrikethrough: (v: boolean) => void,
   selectedCells: Set<string>,
-  data: any,
-  setData: (updater: any) => void
+ data: SheetData,
+setData: SetDataFn
 ) => {
   setStrikethrough(!strikethrough);
   applyStyleToCells(selectedCells, {
@@ -136,8 +147,8 @@ export const toggleCase = (
   isUppercase: boolean,
   setIsUppercase: (v: boolean) => void,
   selectedCells: Set<string>,
-  data: any,
-  setData: (updater: any) => void
+  data: SheetData,
+setData: SetDataFn
 ) => {
   setIsUppercase(!isUppercase);
   applyStyleToCells(selectedCells, {
@@ -158,8 +169,8 @@ export const handleClearFormatting = (
     setFontFamily: (v: string) => void;
   },
   selectedCells: Set<string>,
-  data: any,
-  setData: (updater: any) => void
+  data: SheetData,
+setData: SetDataFn
 ) => {
   setters.setFontColor('#000000');
   setters.setBgColor('#ffffff');

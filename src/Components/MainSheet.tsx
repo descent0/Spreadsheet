@@ -113,7 +113,11 @@ const findMatchingCell = useCallback((query: string): string | null => {
         }
       }
     }
-  }, [searchQuery]);
+  }, [searchQuery,findMatchingCell,
+  onSelectedCellChange,
+  onSelectedCellsChange,
+  visibleRows,
+  visibleCols]);
 
 
   const handleScroll = useCallback(() => {

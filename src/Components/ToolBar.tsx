@@ -2,12 +2,23 @@ import React, { useState } from "react";
 import FormattingToolbar from "./FormattingToolbar";
 import { applyStyleToCells } from "./utils/FormattingFunction";
 
+type CellData = {
+  value: string;
+  customStyle:Partial<React.CSSProperties>
+};
+
+type SheetData = {
+  [cellId: string]: CellData;
+};
+
+type SetDataFn = (updater: (prev: SheetData) => SheetData) => void;
+
 
 type ToolbarProps = {
   selectedCells: Set<string>;
    selectedCell: string | null;
-  data: any;
-  setData: (updater: any) => void;
+  data: SheetData;
+  setData: SetDataFn;
 };
 
 const Toolbar: React.FC<ToolbarProps> = ({ selectedCells, selectedCell, data, setData }) => {

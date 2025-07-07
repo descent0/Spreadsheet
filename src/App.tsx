@@ -45,7 +45,7 @@ map.set("All Orders", sheetData);
     setSelectedCell(null);
     setSelectedCells(new Set());
   }
-}, [activeTab]);
+}, [activeTab,map]);
 
 
 

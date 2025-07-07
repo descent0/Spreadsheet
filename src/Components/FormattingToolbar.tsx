@@ -29,11 +29,22 @@ import {
   handleClearFormatting,
 } from './utils/FormattingFunction';
 
+type CellData = {
+  value: string;
+  customStyle:Partial<React.CSSProperties>
+};
+
+type SheetData = {
+  [cellId: string]: CellData;
+};
+
+type SetDataFn = (updater: (prev: SheetData) => SheetData) => void;
+
 type FormatbarProps = {
   selectedCells: Set<string>;
   selectedCell: string | null;
-  data: any;
-  setData: (updater: any) => void;
+  data: SheetData;
+  setData: SetDataFn;
 };
 
 const FormattingToolbar: React.FC<FormatbarProps> = ({ selectedCells, selectedCell, data, setData }) => {
@@ -67,7 +78,7 @@ const FormattingToolbar: React.FC<FormatbarProps> = ({ selectedCells, selectedCe
     if (!selectedCell || !data[selectedCell]) return;
 
     const cell = data[selectedCell];
-    const style = cell.customStyle || {};
+   const style: Partial<React.CSSProperties> = cell.customStyle || {};
 
     setFontFamily(style.fontFamily || '');
     setFontColor(style.color || '#000000');
