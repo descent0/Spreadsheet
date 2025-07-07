@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
 // Type definitions
-interface CellData {
+type CellData = {
   value: string;
-  formula?: string;
-  customStyle?: React.CSSProperties;
-}
+  customStyle:Partial<React.CSSProperties>
+};
 
-interface SpreadsheetData {
-  [key: string]: CellData;
-}
+type SheetData = {
+  [cellId: string]: CellData;
+};
 
 const getColumnName = (index: number): string => {
   let result = "";
@@ -47,8 +46,8 @@ type SheetProps = {
   selectedCells: Set<string>;
   onSelectedCellChange: (cell: string | null) => void;
   onSelectedCellsChange: (cells: Set<string>) => void;
-  data: SpreadsheetData;
-  setData: React.Dispatch<React.SetStateAction<SpreadsheetData>>;
+  data: SheetData;
+  setData: React.Dispatch<React.SetStateAction<SheetData>>;
   searchQuery?: string;
 };
 
@@ -66,7 +65,7 @@ const ProjectSpreadsheet: React.FC<SheetProps> = ({
   const [visibleRows, setVisibleRows] = useState<number>(100);
   const [visibleCols, setVisibleCols] = useState<number>(11);
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null!);
   const inputRef = useRef<HTMLInputElement>(null);
   const isSelecting = useRef<boolean>(false);
   const anchorCell = useRef<string | null>(null);
@@ -466,7 +465,7 @@ const scrollToCell = useCallback((
   //values and styling of the cell
   const saveCellValue = (): void => {
     if (editingCell) {
-      setData((prev: SpreadsheetData) => ({
+      setData((prev: SheetData) => ({
         ...prev,
         [editingCell]: { ...(prev[editingCell] || {}), value: editValue },
       }));
@@ -585,7 +584,7 @@ const scrollToCell = useCallback((
               return (
                 <div key={row} className="flex">
                   {/* Sticky row label cell */}
-                  <div className="sticky left-0 z-0 w-[32px] min-w-[32px] border-r border-b border-[#F6F6F6] bg-[#FFFFFF]" />
+                  <div className="sticky left-0 z-50 w-[32px] min-w-[32px] border-r border-b border-[#F6F6F6] bg-[#FFFFFF]" />
                   <div className="w-[628px] min-w-[628px] h-[32px] border-r border-b px-[8px] border-[#F6F6F6] bg-[#E2E2E2] py-[2px] flex gap-2 items-center">
                     <div className="bg-[#EEEEEE] w-[158px] h-full flex items-center gap-1 px-1 rounded">
                       <svg
@@ -738,7 +737,7 @@ const scrollToCell = useCallback((
                         ${getCellStyle(col, row)}
                         ${
                           col === 0
-                            ? "sticky left-0 z-0 w-[32px] min-w-[32px]"
+                            ? "sticky left-0 z-10 w-[32px] min-w-[32px]"
                             : col === 1
                             ? "w-[256px] min-w-[256px]"
                             : "w-[124px] min-w-[124px]"
@@ -777,8 +776,8 @@ const scrollToCell = useCallback((
                       key={`${col}-${row}`}
                       className={`
     ${getCellStyle(col, row)}
-    ${col === 0 ? "sticky left-0 z-0" : ""}
-    relative  // Add this for resize handle positioning
+    ${col === 0 ? `sticky left-0 z-20 ${row!=1?"bg-[#FFFFFF]":""}` : ""}
+    relative  
   `}
                       style={{
                         width: `${getColumnWidth(col)}px`,

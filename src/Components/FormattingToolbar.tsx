@@ -31,14 +31,14 @@ import {
 
 type CellData = {
   value: string;
-  customStyle:Partial<React.CSSProperties>
+  customStyle: Partial<React.CSSProperties>;
 };
 
 type SheetData = {
   [cellId: string]: CellData;
 };
 
-type SetDataFn = (updater: (prev: SheetData) => SheetData) => void;
+type SetDataFn =React.Dispatch<React.SetStateAction<SheetData>>
 
 type FormatbarProps = {
   selectedCells: Set<string>;
@@ -78,24 +78,25 @@ const FormattingToolbar: React.FC<FormatbarProps> = ({ selectedCells, selectedCe
     if (!selectedCell || !data[selectedCell]) return;
 
     const cell = data[selectedCell];
-   const style: Partial<React.CSSProperties> = cell.customStyle || {};
+    const style: Partial<React.CSSProperties> = cell.customStyle || {};
 
     setFontFamily(style.fontFamily || '');
     setFontColor(style.color || '#000000');
     setBgColor(style.backgroundColor || '#ffffff');
     setTextAlign(style.textAlign || '');
 
-    setBold(style.fontWeight?.toLowerCase() === 'bold');
-    setItalic(style.fontStyle?.toLowerCase() === 'italic');
+    setBold(style.fontWeight?.toString().toLowerCase() === 'bold');
+    setItalic(style.fontStyle?.toString().toLowerCase() === 'italic');
 
-    // Handle textDecoration safely
-    const decoration = style.textDecoration?.toLowerCase() || '';
+    const decoration =
+      typeof style.textDecoration === 'string'
+        ? style.textDecoration.toLowerCase()
+        : '';
     setUnderline(decoration.includes('underline'));
     setStrikethrough(decoration.includes('line-through'));
 
-    setIsUppercase(style.textTransform?.toLowerCase() === 'uppercase');
+    setIsUppercase(style.textTransform?.toString().toLowerCase() === 'uppercase');
   }, [selectedCell, data]);
-
 
   const iconBtn = (active: boolean) =>
     `px-2 py-1.5 border border-[#EEEEEE] text-sm text-[#545454] rounded cursor-pointer flex items-center justify-center ${
@@ -104,7 +105,6 @@ const FormattingToolbar: React.FC<FormatbarProps> = ({ selectedCells, selectedCe
 
   return (
     <div className="w-full flex flex-wrap items-center gap-2 px-2 pb-2 border-b bg-white border-[#EEEEEE] mt-2 rounded">
-
 
       {/* Font Family */}
       <TooltipWrapper tooltip="Font Family">
@@ -222,7 +222,6 @@ const FormattingToolbar: React.FC<FormatbarProps> = ({ selectedCells, selectedCe
           <Eraser size={18} />
         </button>
       </TooltipWrapper>
-
     </div>
   );
 };

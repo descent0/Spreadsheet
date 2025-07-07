@@ -1,4 +1,15 @@
-export const sheetData = {
+
+type CellData = {
+  value: string;
+  customStyle:Partial<React.CSSProperties>
+};
+
+type SheetData = {
+  [cellId: string]: CellData;
+};
+
+
+export const sheetData:SheetData = {
   A1: {
     value: `<div class='flex flex-row w-full h-full items-center p-1 justify-between'>
 
@@ -175,6 +186,8 @@ export const sheetData = {
   },
   A2: {
     value: "Launch social media campaign for product XYZ",
+    customStyle: {
+    },
   },
   B2: {
     value: "15-11-2024",
@@ -186,7 +199,7 @@ export const sheetData = {
     value: `<div class='bg-[#FFF3D6] font-medium rounded-xl px-2 p-1'>In-process</div>`,
     customStyle: {
       color: "#85640B",
-      dispaly: "flex",
+      display: "flex",
       alignItems: "center",
       justifyContent: "center",
       fontSize: "12px",
@@ -249,7 +262,7 @@ export const sheetData = {
     value: `<div class='bg-[#E2E8F0] font-medium rounded-xl px-2 p-1'>Need to start</div>`,
     customStyle: {
       color: "#475569",
-      dispaly: "flex",
+      display: "flex",
       alignItems: "center",
       justifyContent: "center",
       fontSize: "12px",
@@ -312,7 +325,7 @@ export const sheetData = {
     value: `<div class='bg-[#FFF3D6] font-medium rounded-xl px-2 p-1'>In-process</div>`,
     customStyle: {
       color: "#85640B",
-      dispaly: "flex",
+      display: "flex",
       alignItems: "center",
       justifyContent: "center",
       fontSize: "12px",
@@ -375,7 +388,7 @@ export const sheetData = {
     value: `<div class='bg-[#D3F2E3] font-medium rounded-xl px-2 p-1'>Complete</div>`,
     customStyle: {
       color: "#0A6E3D",
-      dispaly: "flex",
+      display: "flex",
       alignItems: "center",
       justifyContent: "center",
       fontSize: "12px",
@@ -438,7 +451,7 @@ export const sheetData = {
     value: `<div class='bg-[#FFE1DE] font-medium rounded-xl px-2 p-1'>Blocked</div>`,
     customStyle: {
       color: "#C22219",
-      dispaly: "flex",
+      display: "flex",
       alignItems: "center",
       justifyContent: "center",
       fontSize: "12px",

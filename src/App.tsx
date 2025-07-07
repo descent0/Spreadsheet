@@ -4,15 +4,11 @@ import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import ProjectSpreadsheet from "./Components/MainSheet";
 import Toolbar from "./Components/ToolBar";
-import { sheetData } from "./assets/dummyData";
+import { sheetData } from "./assets/dummyData.ts";
 
 type CellData = {
   value: string;
-  customStyle: {
-    backgroundColor: string;
-    color: string;
-    fontSize: string;
-  };
+  customStyle:Partial<React.CSSProperties>
 };
 
 type SheetData = {

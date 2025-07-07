@@ -7,7 +7,7 @@ type SheetData = {
   [cellId: string]: CellData;
 };
 
-type SetDataFn = (updater: (prev: SheetData) => SheetData) => void;
+type SetDataFn = React.Dispatch<React.SetStateAction<SheetData>>
 
 
 export const applyStyleToCells = (
