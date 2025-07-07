@@ -71,6 +71,74 @@ const ProjectSpreadsheet: React.FC<SheetProps> = ({
   const isSelecting = useRef<boolean>(false);
   const anchorCell = useRef<string | null>(null);
 
+  const [columnWidths, setColumnWidths] = useState<{ [key: number]: number }>({
+    0: 32,
+    1: 256,
+  });
+  const [isResizing, setIsResizing] = useState<number | null>(null);
+  const [resizeStartX, setResizeStartX] = useState<number>(0);
+  const [resizeStartWidth, setResizeStartWidth] = useState<number>(0);
+
+
+  //resizing columns functionality
+
+  const getColumnWidth = (colIndex: number): number => {
+    return (
+      columnWidths[colIndex] ||
+      (colIndex === 0 ? 32 : colIndex === 1 ? 256 : 124)
+    );
+  };
+
+  const handleResizeStart = (e: React.MouseEvent, colIndex: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsResizing(colIndex);
+    setResizeStartX(e.clientX);
+    setResizeStartWidth(getColumnWidth(colIndex));
+  };
+
+  const handleResizeMove = useCallback(
+    (e: MouseEvent) => {
+      if (isResizing === null) return;
+
+      const deltaX = e.clientX - resizeStartX;
+      const newWidth = Math.max(50, resizeStartWidth + deltaX); // minimum width of 50px
+
+      setColumnWidths((prev) => ({
+        ...prev,
+        [isResizing]: newWidth,
+      }));
+    },
+    [isResizing, resizeStartX, resizeStartWidth]
+  );
+
+  const handleResizeEnd = useCallback(() => {
+    setIsResizing(null);
+  }, []);
+
+  useEffect(() => {
+    if (isResizing !== null) {
+      document.addEventListener("mousemove", handleResizeMove);
+      document.addEventListener("mouseup", handleResizeEnd);
+      document.body.style.cursor = "col-resize";
+
+      return () => {
+        document.removeEventListener("mousemove", handleResizeMove);
+        document.removeEventListener("mouseup", handleResizeEnd);
+        document.body.style.cursor = "default";
+      };
+    }
+  }, [isResizing, handleResizeMove, handleResizeEnd]);
+
+  const ResizeHandle = ({ colIndex }: { colIndex: number }) => (
+    <div
+      className="absolute right-0 top-0 w-1 h-full cursor-col-resize hover:bg-blue-400 opacity-0 hover:opacity-100 transition-opacity"
+      onMouseDown={(e) => handleResizeStart(e, colIndex)}
+    />
+  );
+
+  // Function to scroll to a specific cell
+
   const scrollToCell = (
     containerRef: React.RefObject<HTMLDivElement>,
     colIndex: number,
@@ -79,32 +147,35 @@ const ProjectSpreadsheet: React.FC<SheetProps> = ({
     if (!containerRef.current) return;
 
     const container = containerRef.current;
-    const cellWidth = colIndex === 0 ? 256 : 124; // First data column is wider
     const cellHeight = 32;
 
-    // Calculate cell position
-    const cellLeft = 32 + (colIndex === 0 ? 0 : 256 + (colIndex - 1) * 124); // Account for row header and first column
-    const cellTop = (rowIndex + 1) * cellHeight; // +1 because we skip the colored header row
+    // Calculate cell position with dynamic widths
+    let cellLeft = 0;
+    for (let i = 0; i <= colIndex; i++) {
+      if (i === colIndex) break;
+      cellLeft += getColumnWidth(i);
+    }
 
-    // Get container dimensions
+    const cellWidth = getColumnWidth(colIndex);
+    const cellTop = (rowIndex + 1) * cellHeight;
+
+    // Rest of the function remains the same...
     const containerWidth = container.clientWidth;
     const containerHeight = container.clientHeight;
-
-    // Calculate center positions
     const cellCenterX = cellLeft + cellWidth / 2;
     const cellCenterY = cellTop + cellHeight / 2;
-
-    // Calculate scroll positions to center the cell
     const newScrollLeft = cellCenterX - containerWidth / 2;
     const newScrollTop = cellCenterY - containerHeight / 2;
 
-    // Scroll to the calculated position (centered)
     container.scrollTo({
       left: Math.max(0, newScrollLeft),
       top: Math.max(0, newScrollTop),
       behavior: "smooth",
     });
   };
+
+
+  //search functionality
   const findMatchingCell = useCallback(
     (query: string): string | null => {
       if (!query.trim()) return null;
@@ -390,6 +461,10 @@ const ProjectSpreadsheet: React.FC<SheetProps> = ({
     }
   };
 
+
+
+
+  //values and styling of the cell
   const saveCellValue = (): void => {
     if (editingCell) {
       setData((prev: SpreadsheetData) => ({
@@ -702,22 +777,17 @@ const ProjectSpreadsheet: React.FC<SheetProps> = ({
                     <div
                       key={`${col}-${row}`}
                       className={`
-                        ${getCellStyle(col, row)}
-                        ${
-                          col === 0
-                            ? `sticky left-0 z-10 ${
-                                row != 1 ? "bg-[#ffffff]" : ""
-                              } w-[32px] min-w-[32px]`
-                            : col === 1
-                            ? "w-[256px] min-w-[256px]"
-                            : "w-[124px] min-w-[124px]"
-                        }
-                      `}
-                      style={
-                        isDataCell
+    ${getCellStyle(col, row)}
+    ${col === 0 ? "sticky left-0 z-0" : ""}
+    relative  // Add this for resize handle positioning
+  `}
+                      style={{
+                        width: `${getColumnWidth(col)}px`,
+                        minWidth: `${getColumnWidth(col)}px`,
+                        ...(isDataCell
                           ? getMergedStyle(cellKey, col, row)
-                          : undefined
-                      }
+                          : undefined),
+                      }}
                       onClick={() => isDataCell && handleCellClick(cellKey)}
                       onDoubleClick={() =>
                         isDataCell && handleCellDoubleClick(cellKey)
@@ -726,6 +796,8 @@ const ProjectSpreadsheet: React.FC<SheetProps> = ({
                       onMouseOver={() => isDataCell && handleMouseOver(cellKey)}
                     >
                       {getCellContent(col, row)}
+                      {/* Add resize handle for all columns except the last visible one */}
+                      {col < visibleCols - 1 && <ResizeHandle colIndex={col} />}
                     </div>
                   );
                 })}
