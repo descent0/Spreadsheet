@@ -128,7 +128,8 @@ export const sheetData = {
       fontSize: "12px",
     },
   },
-  F1: { value: `<div class='flex flex-row w-full h-full items-center p-1 justify-between'>
+  F1: {
+    value: `<div class='flex flex-row w-full h-full items-center p-1 justify-between'>
 
       <div class='flex flex-row gap-2 items-center'><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M4.99999 5.00016V1.16666C4.99999 0.890522 5.22385 0.666664 5.49999 0.666664C5.77613 0.666664 5.99999 0.890522 5.99999 1.16666V5.00016C5.99999 5.18426 6.14923 5.33349 6.33332 5.33349C6.51742 5.33349 6.66666 5.18426 6.66666 5.00016V1.66666C6.66666 1.39052 6.89051 1.16666 7.16666 1.16666C7.4428 1.16666 7.66666 1.39052 7.66666 1.66666V5.5C7.66666 5.51414 7.66607 5.52815 7.66492 5.54199C7.95307 5.43311 8.31391 5.3308 8.66666 5.3308C8.99988 5.3308 9.28488 5.41402 9.49614 5.52042C9.60043 5.57295 9.69744 5.63651 9.77669 5.7086C9.81564 5.74403 9.8606 5.79083 9.8997 5.84899C9.93042 5.8947 9.99999 6.00873 9.99999 6.16666C9.99999 6.33906 9.91118 6.49929 9.76499 6.59066L8.49409 7.38497L7.38887 8.64563L6.47068 9.91037C6.12577 10.3855 5.57419 10.6666 4.9871 10.6666H4.22808C3.60743 10.6666 3.01232 10.3514 2.69148 9.79256C2.49005 9.44173 2.24069 8.98075 2.0402 8.52451C1.84948 8.09047 1.66666 7.5826 1.66666 7.16663V2.5C1.66666 2.22386 1.89051 2 2.16666 2C2.4428 2 2.66666 2.22386 2.66666 2.5V5.33195C2.66666 5.51604 2.81589 5.66528 2.99999 5.66528C3.18408 5.66528 3.33332 5.51604 3.33332 5.33195V1.66666C3.33332 1.39052 3.55718 1.16666 3.83332 1.16666C4.10947 1.16666 4.33332 1.39052 4.33332 1.66666V5.00016C4.33332 5.18426 4.48256 5.33349 4.66666 5.33349C4.85075 5.33349 4.99999 5.18426 4.99999 5.00016ZM9.99993 14.6667C7.86572 14.6667 6.06612 13.234 5.51041 11.2779C6.10762 11.1501 6.64417 10.8061 7.01011 10.302L7.9103 9.06211L8.93061 7.89829L10.1183 7.15601C10.4594 6.94282 10.6666 6.56893 10.6666 6.16668C10.6666 5.81248 10.5114 5.56405 10.4529 5.47708C10.4203 5.4285 10.3863 5.38501 10.3532 5.34651C12.7655 5.52705 14.6666 7.54152 14.6666 10C14.6666 12.5773 12.5773 14.6667 9.99993 14.6667ZM11.9999 9.33335C11.9999 8.96516 11.7015 8.66668 11.3333 8.66668C10.9651 8.66668 10.6666 8.96516 10.6666 9.33335C10.6666 9.70154 10.9651 10 11.3333 10C11.7015 10 11.9999 9.70154 11.9999 9.33335ZM8.09147 11.1415C7.89245 11.3329 7.8863 11.6494 8.07773 11.8484C8.56229 12.3522 9.24475 12.6666 9.9998 12.6666C10.7549 12.6666 11.4373 12.3522 11.9219 11.8484C12.1133 11.6494 12.1072 11.3329 11.9081 11.1415C11.7091 10.95 11.3926 10.9562 11.2012 11.1552C10.8973 11.4711 10.4718 11.6666 9.9998 11.6666C9.52778 11.6666 9.10228 11.4711 8.79844 11.1552C8.60701 10.9562 8.29048 10.95 8.09147 11.1415ZM9.33327 9.33335C9.33327 8.96516 9.03479 8.66668 8.6666 8.66668C8.29841 8.66668 7.99993 8.96516 7.99993 9.33335C7.99993 9.70154 8.29841 10 8.6666 10C9.03479 10 9.33327 9.70154 9.33327 9.33335Z" fill="#83A588"/>
@@ -140,24 +141,25 @@ export const sheetData = {
 </div>
 
 
-    </div>` ,
+    </div>`,
 
     customStyle: {
-      backgroundColor: "#E8F0E9", 
+      backgroundColor: "#E8F0E9",
       color: "#666C66",
       fontSize: "12px",
     },
-    
   },
-  G1: { value: `<div class='text-[12px] font-medium'>Priority</div>`,
+  G1: {
+    value: `<div class='text-[12px] font-medium'>Priority</div>`,
     customStyle: {
       backgroundColor: "#EAE3FC",
       color: "#655C80",
       fontSize: "12px",
     },
-   },
-  H1: { value: `<div class='text-[12px] font-medium'>Due Date</div>` 
-    ,customStyle: {
+  },
+  H1: {
+    value: `<div class='text-[12px] font-medium'>Due Date</div>`,
+    customStyle: {
       backgroundColor: "#EAE3FC",
       color: "#655C80",
       fontSize: "12px",
@@ -173,268 +175,313 @@ export const sheetData = {
   },
   A2: {
     value: "Launch social media campaign for product XYZ",
-    
   },
-  B2: { value: "15-11-2024" ,
-     customStyle: {
+  B2: {
+    value: "15-11-2024",
+    customStyle: {
       textAlign: "right",
     },
   },
   C2: {
     value: `<div class='bg-[#FFF3D6] font-medium rounded-xl px-2 p-1'>In-process</div>`,
     customStyle: {
-      color: "#85640B", 
+      color: "#85640B",
       dispaly: "flex",
       alignItems: "center",
       justifyContent: "center",
       fontSize: "12px",
     },
   },
-  D2: { value: "Aisha Patel" ,
+  D2: {
+    value: "Aisha Patel",
     customStyle: {
-       color:"#121212"
+      color: "#121212",
     },
   },
-  E2: { value: "www.aishapatel.com" ,
-     customStyle: {
-       color:"#121212"
-    },
-  },
-  F2: { value: "Sophie Choudhury" ,
-     customStyle: {
-       color:"#121212"
-    },
-  },
-  G2: { value: "Medium" ,
+  E2: {
+    value: "www.aishapatel.com",
     customStyle: {
-      color: "#C29210", 
+      color: "#121212",
+    },
+  },
+  F2: {
+    value: "Sophie Choudhury",
+    customStyle: {
+      color: "#121212",
+    },
+  },
+  G2: {
+    value: "Medium",
+    customStyle: {
+      color: "#C29210",
       fontWeight: "bold",
-       textAlign: "center"
-    },
-
-  },
-  H2: { value: "20-11-2024" ,
-    customStyle: {
-      textAlign: "right",
-       color:"#121212"
-    
-    },
-   },
-  I2: { value: "6,200,000 ₹" ,
-     customStyle: {
-      textAlign: "right",
-        color:"#121212"
-    },
-   },
-  A3: { value: "Update press kit for company redesign" ,
-    customStyle: {
-      color: "#121212"
+      textAlign: "center",
     },
   },
-  B3: { value: "28-10-2024" ,
-     customStyle: {
+  H2: {
+    value: "20-11-2024",
+    customStyle: {
       textAlign: "right",
-      color:"#121212"
+      color: "#121212",
     },
   },
-  C3: {  value: `<div class='bg-[#E2E8F0] font-medium rounded-xl px-2 p-1'>Need to start</div>`,
+  I2: {
+    value: "6,200,000 ₹",
     customStyle: {
-      color: "#475569", 
+      textAlign: "right",
+      color: "#121212",
+    },
+  },
+  A3: {
+    value: "Update press kit for company redesign",
+    customStyle: {
+      color: "#121212",
+    },
+  },
+  B3: {
+    value: "28-10-2024",
+    customStyle: {
+      textAlign: "right",
+      color: "#121212",
+    },
+  },
+  C3: {
+    value: `<div class='bg-[#E2E8F0] font-medium rounded-xl px-2 p-1'>Need to start</div>`,
+    customStyle: {
+      color: "#475569",
       dispaly: "flex",
       alignItems: "center",
       justifyContent: "center",
       fontSize: "12px",
-    }, },
-  D3: { value: "Irfan Khan" ,
-    customStyle: {
-      color:"#121212"
-    }
+    },
   },
-  E3: { value: "www.irfankhanportfolio.com" ,
+  D3: {
+    value: "Irfan Khan",
     customStyle: {
-      color:"#121212"
-    }
+      color: "#121212",
+    },
   },
-  F3: { value: "Tejas Pandey" ,
+  E3: {
+    value: "www.irfankhanportfolio.com",
     customStyle: {
-      color:"#121212"}
+      color: "#121212",
+    },
   },
-  G3: { value: "High",
+  F3: {
+    value: "Tejas Pandey",
     customStyle: {
-      color: "#EF4D44", 
+      color: "#121212",
+    },
+  },
+  G3: {
+    value: "High",
+    customStyle: {
+      color: "#EF4D44",
       fontWeight: "bold",
-       textAlign: "center"
-    }, },
-  H3: { value: "30-10-2024" ,
-    customStyle: {
-      textAlign: "right",
-      color:"#121212"
+      textAlign: "center",
     },
   },
-  I3: { value: "3,500,000 ₹" ,
-     customStyle: {
-      textAlign: "right",
-        color:"#121212"
-    },
-   },
-  A4: { value: "Finalize user testing feedback for app update" ,
+  H3: {
+    value: "30-10-2024",
     customStyle: {
-      color: "#121212"
-      },
-  },
-  B4: { value: "05-12-2024" ,
-     customStyle: {
       textAlign: "right",
-      color:"#121212"
+      color: "#121212",
     },
   },
-  C4: {  value: `<div class='bg-[#FFF3D6] font-medium rounded-xl px-2 p-1'>In-process</div>`,
+  I3: {
+    value: "3,500,000 ₹",
     customStyle: {
-      color: "#85640B", 
+      textAlign: "right",
+      color: "#121212",
+    },
+  },
+  A4: {
+    value: "Finalize user testing feedback for app update",
+    customStyle: {
+      color: "#121212",
+    },
+  },
+  B4: {
+    value: "05-12-2024",
+    customStyle: {
+      textAlign: "right",
+      color: "#121212",
+    },
+  },
+  C4: {
+    value: `<div class='bg-[#FFF3D6] font-medium rounded-xl px-2 p-1'>In-process</div>`,
+    customStyle: {
+      color: "#85640B",
       dispaly: "flex",
       alignItems: "center",
       justifyContent: "center",
       fontSize: "12px",
-    }, },
-  D4: { value: "Mark Johnson" ,
-    customStyle: {
-      color:"#121212"
-    }
-  },
-  E4: { value: "www.markjohnsondesigns.com" ,
-    customStyle: {
-      color:"#121212"
-    }
-  },
-  F4: { value: "Rachel Lee" ,
-    customStyle: {
-      color:"#121212"
-    }
-  },
-  G4: { value: "Medium" ,
-    customStyle: {
-      color: "#C29210", 
-      fontWeight: "bold",
-       textAlign: "center"
     },
   },
-  H4: { value: "10-12-2024" ,
+  D4: {
+    value: "Mark Johnson",
+    customStyle: {
+      color: "#121212",
+    },
+  },
+  E4: {
+    value: "www.markjohnsondesigns.com",
+    customStyle: {
+      color: "#121212",
+    },
+  },
+  F4: {
+    value: "Rachel Lee",
+    customStyle: {
+      color: "#121212",
+    },
+  },
+  G4: {
+    value: "Medium",
+    customStyle: {
+      color: "#C29210",
+      fontWeight: "bold",
+      textAlign: "center",
+    },
+  },
+  H4: {
+    value: "10-12-2024",
     customStyle: {
       textAlign: "right",
-      color:"#121212"
+      color: "#121212",
     },
   },
   I4: {
     value: "4,750,000 ₹",
     customStyle: {
       textAlign: "right",
-        color:"#121212"
+      color: "#121212",
     },
   },
-  A5: { value: "Design new features for the website" ,
+  A5: {
+    value: "Design new features for the website",
     customStyle: {
-      color: "#121212"
-      }
+      color: "#121212",
+    },
   },
-  B5: { value: "10-01-2025" ,
-     customStyle: {
+  B5: {
+    value: "10-01-2025",
+    customStyle: {
       textAlign: "right",
-      color:"#121212"
+      color: "#121212",
     },
   },
-  C5: {  value: `<div class='bg-[#D3F2E3] font-medium rounded-xl px-2 p-1'>Complete</div>`,
+  C5: {
+    value: `<div class='bg-[#D3F2E3] font-medium rounded-xl px-2 p-1'>Complete</div>`,
     customStyle: {
-      color: "#0A6E3D", 
+      color: "#0A6E3D",
       dispaly: "flex",
       alignItems: "center",
       justifyContent: "center",
       fontSize: "12px",
-    }, },
-  D5: { value: "Emily Green" ,
-    customStyle: {
-      color:"#121212"
-    }
+    },
   },
-  E5: { value: "www.emilygreenart.com" ,
+  D5: {
+    value: "Emily Green",
     customStyle: {
-      color:"#121212"
-    }
+      color: "#121212",
+    },
   },
-  F5: { value: "Tom Wright" ,
+  E5: {
+    value: "www.emilygreenart.com",
     customStyle: {
-      color:"#121212"
-    }
+      color: "#121212",
+    },
   },
-  G5: { value: "Low",
+  F5: {
+    value: "Tom Wright",
     customStyle: {
-      color: "#1A8CFF", 
+      color: "#121212",
+    },
+  },
+  G5: {
+    value: "Low",
+    customStyle: {
+      color: "#1A8CFF",
       fontWeight: "bold",
-       textAlign: "center"
-    },
-   },
-   H5: { value: "15-01-2025",
-    customStyle: {
-      textAlign: "right",
-      color:"#121212"
-    },
-    },
-  I5: { value: "5,900,000 ₹" ,
-     customStyle: {
-      textAlign: "right",
-        color:"#121212"
+      textAlign: "center",
     },
   },
-  A6: { value: "Prepare financial report for Q4" ,
+  H5: {
+    value: "15-01-2025",
     customStyle: {
-      color: "#121212"
-    }
-  },
-  B6: { value: "25-01-2025" ,
-     customStyle: {
       textAlign: "right",
-      color:"#121212"
+      color: "#121212",
     },
   },
-  C6: {  value: `<div class='bg-[#FFE1DE] font-medium rounded-xl px-2 p-1'>In-process</div>`,
+  I5: {
+    value: "5,900,000 ₹",
     customStyle: {
-      color: "#C22219", 
+      textAlign: "right",
+      color: "#121212",
+    },
+  },
+  A6: {
+    value: "Prepare financial report for Q4",
+    customStyle: {
+      color: "#121212",
+    },
+  },
+  B6: {
+    value: "25-01-2025",
+    customStyle: {
+      textAlign: "right",
+      color: "#121212",
+    },
+  },
+  C6: {
+    value: `<div class='bg-[#FFE1DE] font-medium rounded-xl px-2 p-1'>Blocked</div>`,
+    customStyle: {
+      color: "#C22219",
       dispaly: "flex",
       alignItems: "center",
       justifyContent: "center",
       fontSize: "12px",
-    }, },
-  D6: { value: "Jessica Brown" ,
-    customStyle: {
-      color:"#121212"
-    }
+    },
   },
-  E6: { value: "www.jessicabrowncreative.com" ,
+  D6: {
+    value: "Jessica Brown",
     customStyle: {
-      color:"#121212"
-    }
+      color: "#121212",
+    },
   },
-  F6: { value: "Kevin Smith" ,
+  E6: {
+    value: "www.jessicabrowncreative.com",
     customStyle: {
-      color:"#121212"
-    }
+      color: "#121212",
+    },
   },
-  G6: { value: "Low" ,
+  F6: {
+    value: "Kevin Smith",
     customStyle: {
-      color: "#1A8CFF", 
+      color: "#121212",
+    },
+  },
+  G6: {
+    value: "Low",
+    customStyle: {
+      color: "#1A8CFF",
       fontWeight: "bold",
-       textAlign: "center"
+      textAlign: "center",
     },
   },
-  H6: { value: "30-01-2025",
+  H6: {
+    value: "30-01-2025",
     customStyle: {
       textAlign: "right",
-      color:"#121212"
+      color: "#121212",
     },
-   },
-  I6: { value: "2,800,000 ₹" ,
-     customStyle: {
+  },
+  I6: {
+    value: "2,800,000 ₹",
+    customStyle: {
       textAlign: "right",
-      color:"#121212"
+      color: "#121212",
     },
   },
 };

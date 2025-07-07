@@ -59,7 +59,7 @@ const ProjectSpreadsheet: React.FC<SheetProps> = ({
   onSelectedCellsChange,
   data,
   setData,
-  searchQuery
+  searchQuery,
 }) => {
   const [editingCell, setEditingCell] = useState<string | null>(null);
   const [editValue, setEditValue] = useState<string>("");
@@ -71,27 +71,72 @@ const ProjectSpreadsheet: React.FC<SheetProps> = ({
   const isSelecting = useRef<boolean>(false);
   const anchorCell = useRef<string | null>(null);
 
-const findMatchingCell = useCallback((query: string): string | null => {
-  if (!query.trim()) return null;
-  
-  const lowerQuery = query.toLowerCase();
-  
-  for (const [cellKey, cellData] of Object.entries(data)) {
-    // Parse the cell key to get row information
-    const { rowIndex } = parseCellKey(cellKey);
-    
-    // Skip rows 0 and 1 (rowIndex -1 means row 0, rowIndex 0 means row 1)
-    if (rowIndex <= 0) {
-      continue;
-    }
-    
-    if (cellData.value && cellData.value.toLowerCase().startsWith(lowerQuery)) {
-      return cellKey;
-    }
-  }
-  
-  return null;
-}, [data]);
+  const scrollToCell = (
+    containerRef: React.RefObject<HTMLDivElement>,
+    colIndex: number,
+    rowIndex: number
+  ) => {
+    if (!containerRef.current) return;
+
+    const container = containerRef.current;
+    const cellWidth = colIndex === 0 ? 256 : 124; // First data column is wider
+    const cellHeight = 32;
+
+    // Calculate cell position
+    const cellLeft = 32 + (colIndex === 0 ? 0 : 256 + (colIndex - 1) * 124); // Account for row header and first column
+    const cellTop = (rowIndex + 1) * cellHeight; // +1 because we skip the colored header row
+
+    // Get container dimensions
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+
+    // Calculate center positions
+    const cellCenterX = cellLeft + cellWidth / 2;
+    const cellCenterY = cellTop + cellHeight / 2;
+
+    // Calculate scroll positions to center the cell
+    const newScrollLeft = cellCenterX - containerWidth / 2;
+    const newScrollTop = cellCenterY - containerHeight / 2;
+
+    // Scroll to the calculated position (centered)
+    container.scrollTo({
+      left: Math.max(0, newScrollLeft),
+      top: Math.max(0, newScrollTop),
+      behavior: "smooth",
+    });
+  };
+  const findMatchingCell = useCallback(
+    (query: string): string | null => {
+      if (!query.trim()) return null;
+
+      const lowerQuery = query.toLowerCase();
+
+      for (const [cellKey, cellData] of Object.entries(data)) {
+        // Parse the cell key to get row information
+        const { rowIndex } = parseCellKey(cellKey);
+
+        // Skip rows 0 and 1 (rowIndex -1 means row 0, rowIndex 0 means row 1)
+        if (rowIndex <= 0) {
+          continue;
+        }
+
+        if (
+          cellData.value &&
+          cellData.value.toLowerCase().startsWith(lowerQuery)
+        ) {
+          return cellKey;
+        } else if (cellData.value) {
+          const plainText = cellData.value.replace(/<[^>]*>/g, "");
+          if (plainText.toLowerCase().includes(lowerQuery)) {
+            return cellKey;
+          }
+        }
+      }
+
+      return null;
+    },
+    [data]
+  );
 
   useEffect(() => {
     if (searchQuery && searchQuery.trim()) {
@@ -100,10 +145,10 @@ const findMatchingCell = useCallback((query: string): string | null => {
         // Set the found cell as active
         onSelectedCellChange(matchingCell);
         onSelectedCellsChange(new Set([matchingCell]));
-        
-        // Scroll to the cell if needed
+
+        // Parse cell position
         const { colIndex, rowIndex } = parseCellKey(matchingCell);
-        
+
         // Ensure the cell is visible by expanding visible rows/cols if needed
         if (rowIndex >= visibleRows - 10) {
           setVisibleRows(Math.max(visibleRows, rowIndex + 20));
@@ -111,29 +156,28 @@ const findMatchingCell = useCallback((query: string): string | null => {
         if (colIndex >= visibleCols - 2) {
           setVisibleCols(Math.max(visibleCols, colIndex + 5));
         }
+
+        // Scroll to the cell after a short delay to ensure DOM is updated
+        setTimeout(() => {
+          scrollToCell(containerRef, colIndex, rowIndex);
+        }, 100);
       }
     }
-  }, [searchQuery,findMatchingCell,
-  onSelectedCellChange,
-  onSelectedCellsChange,
-  visibleRows,
-  visibleCols]);
-
-
+  }, [
+    searchQuery,
+    findMatchingCell,
+    onSelectedCellChange,
+    onSelectedCellsChange,
+    visibleRows,
+    visibleCols,
+  ]);
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
-    const {
-      scrollTop,
-      scrollHeight,
-      clientHeight,
-    } = containerRef.current;
+    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
 
     if (scrollTop + clientHeight >= scrollHeight - 100) {
       setVisibleRows((prev) => prev + 50);
     }
-    // if (scrollLeft + clientWidth >= scrollWidth - 100) {
-    //   setVisibleCols((prev) => prev + 10);
-    // }
   }, []);
 
   useEffect(() => {
@@ -143,6 +187,115 @@ const findMatchingCell = useCallback((query: string): string | null => {
       return () => container.removeEventListener("scroll", handleScroll);
     }
   }, [handleScroll]);
+
+  //keyboard navigation
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't handle keyboard navigation if we're editing a cell
+      if (editingCell) return;
+
+      // Don't handle if no cell is selected
+      if (!selectedCell) return;
+
+      const { colIndex, rowIndex } = parseCellKey(selectedCell);
+      let newColIndex = colIndex;
+      let newRowIndex = rowIndex;
+
+      switch (e.key) {
+        case "ArrowUp":
+          e.preventDefault();
+          newRowIndex = Math.max(1, rowIndex - 1); // Don't go above row 1 (index 0)
+          break;
+        case "ArrowDown":
+          e.preventDefault();
+          newRowIndex = Math.min(visibleRows - 1, rowIndex + 1);
+          // Expand visible rows if needed
+          if (newRowIndex >= visibleRows - 10) {
+            setVisibleRows((prev) => prev + 20);
+          }
+          break;
+        case "ArrowLeft":
+          e.preventDefault();
+          newColIndex = Math.max(0, colIndex - 1);
+          break;
+        case "ArrowRight":
+          e.preventDefault();
+          newColIndex = Math.min(visibleCols - 2, colIndex + 1);
+          // Expand visible cols if needed
+          if (newColIndex >= visibleCols - 3) {
+            setVisibleCols((prev) => prev + 5);
+          }
+          break;
+        case "Enter":
+          e.preventDefault();
+          // Start editing the current cell
+          setEditingCell(selectedCell);
+          setEditValue(data[selectedCell]?.value || "");
+          break;
+        case "Delete":
+          e.preventDefault();
+          // Clear the selected cell(s)
+          setData((prev) => {
+            const newData = { ...prev };
+            selectedCells.forEach((cellKey) => {
+              if (newData[cellKey]) {
+                newData[cellKey] = { ...newData[cellKey], value: "" };
+              }
+            });
+            return newData;
+          });
+          break;
+        case "Tab":
+          e.preventDefault();
+          // Move right (or left if Shift+Tab)
+          if (e.shiftKey) {
+            newColIndex = Math.max(0, colIndex - 1);
+          } else {
+            newColIndex = Math.min(visibleCols - 2, colIndex + 1);
+            if (newColIndex >= visibleCols - 3) {
+              setVisibleCols((prev) => prev + 5);
+            }
+          }
+          break;
+        case "Escape":
+          // Clear selection
+          onSelectedCellChange(null);
+          onSelectedCellsChange(new Set());
+          return;
+        default:
+          return;
+      }
+
+      if (newColIndex !== colIndex || newRowIndex !== rowIndex) {
+        const newCellKey = getCellKey(newColIndex, newRowIndex + 1);
+        onSelectedCellChange(newCellKey);
+        onSelectedCellsChange(new Set([newCellKey]));
+        anchorCell.current = newCellKey;
+
+        // Scroll to the new cell after a short delay
+        setTimeout(() => {
+          scrollToCell(containerRef, newColIndex, newRowIndex);
+        }, 50);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [
+    selectedCell,
+    selectedCells,
+    editingCell,
+    data,
+    visibleRows,
+    visibleCols,
+    onSelectedCellChange,
+    onSelectedCellsChange,
+    setData,
+  ]);
 
   const handleCellClick = (cellKey: string): void => {
     if (editingCell) setEditingCell(null);
@@ -199,6 +352,38 @@ const findMatchingCell = useCallback((query: string): string | null => {
   ): void => {
     if (e.key === "Enter") {
       saveCellValue();
+
+      if (selectedCell) {
+        const { colIndex, rowIndex } = parseCellKey(selectedCell);
+        const newRowIndex = Math.min(visibleRows - 1, rowIndex + 1);
+        if (newRowIndex >= visibleRows - 10) {
+          setVisibleRows((prev) => prev + 20);
+        }
+        const newCellKey = getCellKey(colIndex, newRowIndex + 1);
+        onSelectedCellChange(newCellKey);
+        onSelectedCellsChange(new Set([newCellKey]));
+        anchorCell.current = newCellKey;
+      }
+    } else if (e.key === "Tab") {
+      e.preventDefault();
+      saveCellValue();
+      // Move right after Tab (or left if Shift+Tab)
+      if (selectedCell) {
+        const { colIndex, rowIndex } = parseCellKey(selectedCell);
+        let newColIndex;
+        if (e.shiftKey) {
+          newColIndex = Math.max(0, colIndex - 1);
+        } else {
+          newColIndex = Math.min(visibleCols - 2, colIndex + 1);
+          if (newColIndex >= visibleCols - 3) {
+            setVisibleCols((prev) => prev + 5);
+          }
+        }
+        const newCellKey = getCellKey(newColIndex, rowIndex + 1);
+        onSelectedCellChange(newCellKey);
+        onSelectedCellsChange(new Set([newCellKey]));
+        anchorCell.current = newCellKey;
+      }
     } else if (e.key === "Escape") {
       setEditingCell(null);
       setEditValue("");
@@ -224,10 +409,10 @@ const findMatchingCell = useCallback((query: string): string | null => {
     const isSelected = selectedCells.has(cellKey);
     const isEditing = editingCell === cellKey;
     const fontSize = custom?.fontSize || "12px";
-    custom={
+    custom = {
       ...custom,
       fontSize,
-    }
+    };
     // Only apply selection background if selected and not editing
     if (isSelected && !isEditing && col > 0 && row > 0) {
       return {
@@ -244,8 +429,7 @@ const findMatchingCell = useCallback((query: string): string | null => {
     const isActive = selectedCell === cellKey;
     const { rowIndex } = parseCellKey(selectedCell ?? "A1");
 
-    let baseStyle =
-      `border-r border-b border-[#F6F6F6] h-[32px] flex items-center px-2 cursor-cell select-none`;
+    let baseStyle = `border-r border-b border-[#F6F6F6] h-[32px] flex items-center px-2 cursor-cell select-none`;
 
     if (isSelected && !isEditing) {
       baseStyle += " bg-[#e3f3e9]";
@@ -254,10 +438,9 @@ const findMatchingCell = useCallback((query: string): string | null => {
           " bg-transparent shadow-[inset_0_0_0_1px_#6C8B70,_0_1px_1px_rgba(0,0,0,0.1)]";
       }
     } else if (col === 0) {
-      if(row==1){
-         baseStyle += " bg-[#EEEEEE] font-medium text-gray-700";
-      }
-      else if (row === rowIndex + 1) {
+      if (row == 1) {
+        baseStyle += " bg-[#EEEEEE] font-medium text-gray-700";
+      } else if (row === rowIndex + 1) {
         baseStyle += " bg-[#c7d7c9] font-medium text-gray-700";
       }
     } else {
@@ -329,7 +512,7 @@ const findMatchingCell = useCallback((query: string): string | null => {
                 <div key={row} className="flex">
                   {/* Sticky row label cell */}
                   <div className="sticky left-0 z-0 w-[32px] min-w-[32px] border-r border-b border-[#F6F6F6] bg-[#FFFFFF]" />
-                  <div  className="w-[628px] min-w-[628px] h-[32px] border-r border-b px-[8px] border-[#F6F6F6] bg-[#E2E2E2] py-[2px] flex gap-2 items-center">
+                  <div className="w-[628px] min-w-[628px] h-[32px] border-r border-b px-[8px] border-[#F6F6F6] bg-[#E2E2E2] py-[2px] flex gap-2 items-center">
                     <div className="bg-[#EEEEEE] w-[158px] h-full flex items-center gap-1 px-1 rounded">
                       <svg
                         width="16"
@@ -344,7 +527,9 @@ const findMatchingCell = useCallback((query: string): string | null => {
                         />
                       </svg>
 
-                      <p className="h-full text-[12px] content-center text-[#545454]">Q3 Financial Overview</p>
+                      <p className="h-full text-[12px] content-center text-[#545454]">
+                        Q3 Financial Overview
+                      </p>
                     </div>
                     <div>
                       <svg
@@ -449,9 +634,12 @@ const findMatchingCell = useCallback((query: string): string | null => {
                     </svg>
                   </div>
 
-                  <div onClick={()=>{
-                    setVisibleCols((prev) => prev + 1);
-                  }} className="w-[124px] min-w-[124px] h-[32px] border-r border-b border-[#F6F6F6] bg-[#EEEEEE] text-center content-center flex items-center justify-center">
+                  <div
+                    onClick={() => {
+                      setVisibleCols((prev) => prev + 1);
+                    }}
+                    className="w-[124px] min-w-[124px] h-[32px] border-r border-b border-[#F6F6F6] bg-[#EEEEEE] text-center content-center flex items-center justify-center"
+                  >
                     <svg
                       width="20"
                       height="20"
@@ -465,14 +653,14 @@ const findMatchingCell = useCallback((query: string): string | null => {
                       />
                     </svg>
                   </div>
-                   {Array.from({ length: visibleCols-11 }, (_, col) => {
-                    col=col+11;
-                  const isDataCell = col > 0;
-                  const cellKey = isDataCell ? getCellKey(col - 1, row) : "";
-                  return (
-                    <div
-                      key={`${col}-${row}`}
-                      className={`
+                  {Array.from({ length: visibleCols - 11 }, (_, col) => {
+                    col = col + 11;
+                    const isDataCell = col > 0;
+                    const cellKey = isDataCell ? getCellKey(col - 1, row) : "";
+                    return (
+                      <div
+                        key={`${col}-${row}`}
+                        className={`
                         ${getCellStyle(col, row)}
                         ${
                           col === 0
@@ -482,25 +670,27 @@ const findMatchingCell = useCallback((query: string): string | null => {
                             : "w-[124px] min-w-[124px]"
                         }
                       `}
-                      style={
-                        isDataCell
-                          ? getMergedStyle(cellKey, col, row)
-                          : undefined
-                      }
-                      onClick={() => isDataCell && handleCellClick(cellKey)}
-                      onDoubleClick={() =>
-                        isDataCell && handleCellDoubleClick(cellKey)
-                      }
-                      onMouseDown={() => isDataCell && handleMouseDown(cellKey)}
-                      onMouseOver={() => isDataCell && handleMouseOver(cellKey)}
-                    >
-                      {getCellContent(col, row)}
-                    </div>
-                  );
-                })}
-                  
+                        style={
+                          isDataCell
+                            ? getMergedStyle(cellKey, col, row)
+                            : undefined
+                        }
+                        onClick={() => isDataCell && handleCellClick(cellKey)}
+                        onDoubleClick={() =>
+                          isDataCell && handleCellDoubleClick(cellKey)
+                        }
+                        onMouseDown={() =>
+                          isDataCell && handleMouseDown(cellKey)
+                        }
+                        onMouseOver={() =>
+                          isDataCell && handleMouseOver(cellKey)
+                        }
+                      >
+                        {getCellContent(col, row)}
+                      </div>
+                    );
+                  })}
                 </div>
-               
               );
             }
             return (
@@ -515,7 +705,9 @@ const findMatchingCell = useCallback((query: string): string | null => {
                         ${getCellStyle(col, row)}
                         ${
                           col === 0
-                            ? `sticky left-0 z-10 ${row!=1?'bg-[#ffffff]':''} w-[32px] min-w-[32px]`
+                            ? `sticky left-0 z-10 ${
+                                row != 1 ? "bg-[#ffffff]" : ""
+                              } w-[32px] min-w-[32px]`
                             : col === 1
                             ? "w-[256px] min-w-[256px]"
                             : "w-[124px] min-w-[124px]"
